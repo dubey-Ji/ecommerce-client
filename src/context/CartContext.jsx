@@ -55,6 +55,7 @@ export const CartProvider = ({ children }) => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       },
+      withCredentials: true,
       data: { productId, quantity: 1 }
     });
     if (response.data.success) {
@@ -76,7 +77,8 @@ export const CartProvider = ({ children }) => {
         url: `/cart/${productId}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+        },
+        withCredentials: true
       });
       if (response.data.success) {
         const newCart = cart.filter(id => id !== productId);

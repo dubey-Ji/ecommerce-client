@@ -47,15 +47,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/wishlist',
-        element: <UserProvider><WishlistProvider><UserRoute element={<Wishlist />} /></WishlistProvider></UserProvider>
+        element: <WishlistProvider><UserRoute element={<Wishlist />} /></WishlistProvider>
       },
       {
         path: '/cart',
-        element: <UserProvider><CartProvider><UserRoute element={<CartPage />} /></CartProvider></UserProvider>
+        element: <UserRoute element={<CartPage />} />
       },
       {
         path: '/shop',
-        element: <UserProvider><ProductListingPage /></UserProvider>
+        element: <ProductListingPage />
       },
       {
         path: '/product/:id',
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/logout',
-        element: <UserProvider><UserRoute element={<Logout />} /></UserProvider>
+        element: <UserRoute element={<Logout />} />
       }
     ]
   },
@@ -85,19 +85,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/admin/dashboard/add-product',
-        element: <AdminProvider><AdminRoute element={<AddProductPage />} /></AdminProvider>
+        element: <AdminRoute element={<AddProductPage />} />
       },
       {
         path: '/admin/dashboard/products',
-        element: <AdminProvider><AdminRoute element={<ProductListPage />} /></AdminProvider>
+        element: <AdminRoute element={<ProductListPage />} />
       },
       {
         path: '/admin/dashboard/customers',
-        element: <AdminProvider><AdminRoute element={<CustomerListPage />} /></AdminProvider>
+        element: <AdminRoute element={<CustomerListPage />} />
       },
       {
         path: '/admin/dashboard/orders',
-        element: <AdminProvider><AdminRoute element={<OrderListPage />} /></AdminProvider>
+        element: <AdminRoute element={<OrderListPage />} />
       },
     ]
   },
