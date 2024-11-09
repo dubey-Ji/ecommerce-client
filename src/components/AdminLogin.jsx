@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
+import axiosInstance from '../interceptors/axios.http';
 
 const AdminLogin = () => {
     const [email, setEmail] = useState('');
@@ -30,9 +30,9 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.request({
+            const response = await axiosInstance.request({
                 method: 'POST',
-                url: 'http://localhost:8000/api/auth/admin-login',
+                url: '/auth/admin-login',
                 data: { email, password },
                 withCredentials: true
             });

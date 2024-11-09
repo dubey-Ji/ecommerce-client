@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../interceptors/axios.http';
 
 const Signup = () => {
   const [form] = Form.useForm();
@@ -16,9 +16,9 @@ const Signup = () => {
   const handleSignup = async (values) => {
     console.log('signup')
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'POST',
-        url: 'http://localhost:8000/api/auth/register',
+        url: '/auth/register',
         data: values
       })
       if (response.data.success) {

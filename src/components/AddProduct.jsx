@@ -3,7 +3,7 @@ import { Layout, Form, Input, Button, Upload, Select, Space, Tabs, InputNumber, 
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 import RichTextEditor from './RichTextEditor.jsx';
 import 'react-quill/dist/quill.snow.css';
-import axios from 'axios';
+import axiosInstance from '../interceptors/axios.http';
 
 const { Content, Sider } = Layout;
 const { Option } = Select;
@@ -30,9 +30,9 @@ const AddProductPage = () => {
 
   const fetchCategories = async () => {
     try {
-        const response = await axios.request({
+        const response = await axiosInstance.request({
             method: 'GET',
-            url: 'http://localhost:8000/api/category'
+            url: '/category'
         });
         setCategories(response.data.data)
     } catch (error) {
@@ -68,9 +68,9 @@ const AddProductPage = () => {
     };
     console.log(updatedProduct);
     setProduct(updatedProduct);
-    const response = await axios.request({
+    const response = await axiosInstance.request({
       method: 'POST',
-      url: 'http://localhost:8000/api/product',
+      url: '/product',
       data: updatedProduct,
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -104,9 +104,9 @@ const AddProductPage = () => {
       stock: 10
     };
     setProduct(updatedProduct);
-    const response = await axios.request({
+    const response = await axiosInstance.request({
       method: 'POST',
-      url: 'http://localhost:8000/api/product',
+      url: '/product',
       data: updatedProduct,
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -151,7 +151,7 @@ const AddProductPage = () => {
 
               <Form.Item name="images" label="Display images">
                 <Upload.Dragger
-                action="http://localhost:8000/api/product/image"
+                action={`${import.meta.env.BASE_URL}/product/image`}
                 headers={{
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }}

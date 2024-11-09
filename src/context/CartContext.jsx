@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
 import { message } from "antd";
 import { useUser } from "./UserContext";
+import axiosInstance from "../interceptors/axios.http";
 
 const CartContext = createContext();
 const WishlistContext = createContext();
@@ -11,9 +11,9 @@ export const CartProvider = ({ children }) => {
   const { userData } = useUser();
   const fetchCart = async () => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'GET',
-        url: `http://localhost:8000/api/cart`,
+        url: `/cart`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -49,9 +49,9 @@ export const CartProvider = ({ children }) => {
       newCart = cart;
     }
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'POST',
-      url: `http://localhost:8000/api/cart`,
+      url: `/cart`,
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       },
@@ -71,9 +71,9 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (productId) => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'DELETE',
-        url: `http://localhost:8000/api/cart/${productId}`,
+        url: `/cart/${productId}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -93,9 +93,9 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'DELETE',
-        url: `http://localhost:8000/api/cart`,
+        url: `/cart`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -123,9 +123,9 @@ export const WishlistProvider = ({ children }) => {
 
     const fetchWishlist = async () => {
     try {
-            const response = await axios.request({
+            const response = await axiosInstance.request({
         method: 'GET',
-        url: `http://localhost:8000/api/wishlist`,
+        url: `/wishlist`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -156,9 +156,9 @@ export const WishlistProvider = ({ children }) => {
 
   const addToWishlist = async (productId) => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'POST',
-        url: `http://localhost:8000/api/wishlist`,
+        url: `/wishlist`,
         headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
@@ -179,9 +179,9 @@ export const WishlistProvider = ({ children }) => {
 
   const removeFromWishlist = async (productId) => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'DELETE',
-        url: `http://localhost:8000/api/wishlist/${productId}`,
+        url: `/wishlist/${productId}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -201,9 +201,9 @@ export const WishlistProvider = ({ children }) => {
 
   const clearWishlist = async () => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'DELETE',
-        url: `http://localhost:8000/api/wishlist`,
+        url: `/wishlist`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Image, Space, Dropdown, Menu } from 'antd';
 import { MoreOutlined, ShoppingCartOutlined, DeleteOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import { message } from 'antd';
+import axiosInstance from '../interceptors/axios.http';
 
 const WishlistTable = () => {
   const [wishlist, setWishlist] = useState([]);
 
   const fetchWishlist = async () => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'GET',
-        url: `http://localhost:8000/api/wishlist`,
+        url: `/wishlist`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },
@@ -36,9 +36,9 @@ const WishlistTable = () => {
   const handleDelete = async (key) => {
     console.log('key', key);
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'DELETE',
-        url: `http://localhost:8000/api/wishlist/${key}`,
+        url: `/wishlist/${key}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },

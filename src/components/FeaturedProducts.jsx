@@ -1,11 +1,11 @@
 import { Button } from "antd";
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useCart, useWishlist } from "../context/CartContext";
 import { message } from "antd";
 import { useNavigate, Link } from "react-router-dom";
+import axiosInstance from "../interceptors/axios.http";
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,7 +15,10 @@ const FeaturedProducts = () => {
   const { userData } = useUser();
   const navigate = useNavigate();
   const fetchProducts = async () => {
-    const response = await axios.get("http://localhost:8000/api/product");
+    const response = await axiosInstance.request({
+      method: 'GET',
+      url: '/product'
+    });
     setProducts(response.data.data.slice(response.data.data.length - 4, response.data.data.length));
   }
 
