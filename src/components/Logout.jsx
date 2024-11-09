@@ -1,12 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useEffect } from 'react';
+import axiosInstance from '../interceptors/axios.http';
 
 const Logout = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.post('http://localhost:8000/api/auth/logout')
+        axiosInstance.request({
+            method: 'POST',
+            url: '/auth/logout',
+            withCredentials: true
+        })
             .then(response => {
                 console.log(response.data);
             })

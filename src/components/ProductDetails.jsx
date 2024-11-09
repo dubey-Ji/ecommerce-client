@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Carousel, Rate, InputNumber, Button, Tabs, Card, Row, Col, Input, Rate as AntRate } from 'antd';
 import { ShoppingCartOutlined, HeartOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useUser } from '../context/UserContext';
 // import { useCart, useWishlist } from '../context/CartContext';
 import useAddToCart from '../Customhooks/useAddToCart';
+import axiosInstance from '../interceptors/axios.http';
 
 const { TabPane } = Tabs;
 
@@ -25,9 +25,9 @@ const ProductDetails = () => {
   const addToCart = useAddToCart();
   const fetchProduct = async (productId) => {
     try {
-        const response = await axios.request({
+        const response = await axiosInstance.request({
             method: 'GET',
-            url: `http://localhost:8000/api/product/${productId}`
+            url: `/product/${productId}`
         });
         if (response.data.success) {
             // setCategory(response.data.data.category);
@@ -43,9 +43,9 @@ const ProductDetails = () => {
 
   const fetchReviews = async(productId) => {
     try {
-        const response = await axios.request({
+        const response = await axiosInstance.request({
             method: 'GET',
-            url: `http://localhost:8000/api/reviews/${productId}`
+            url: `/reviews/${productId}`
         })
         console.log('response', response.data.data)
         if (response.data.success) {
@@ -59,9 +59,9 @@ const ProductDetails = () => {
   const addReview = async(productId, review, rating, userId) => {
     try {
         console.log('addReview', productId, review, rating, userId)
-        const response = await axios.request({
+        const response = await axiosInstance.request({
             method: 'POST',
-            url: `http://localhost:8000/api/reviews`,
+            url: `/reviews`,
             data: { productId, comment: review, rating, userId }
         })
         if (response.data.success) {
@@ -79,9 +79,9 @@ const ProductDetails = () => {
 
   const fetchSimilarCategoryProducts = async (category) => {
     try {
-        const response = await axios.request({
+        const response = await axiosInstance.request({
             method: 'GET',
-            url: `http://localhost:8000/api/product/category/${category}`
+            url: `/product/category/${category}`
         });
         // if (response.data.success) {
             // setSimilarProducts(response.data.data);

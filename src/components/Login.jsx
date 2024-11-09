@@ -2,8 +2,8 @@ import React from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useUser } from '../context/UserContext';
+import axiosInstance from '../interceptors/axios.http';
 
 const Login = () => {
   const [form] = Form.useForm();
@@ -17,9 +17,9 @@ const Login = () => {
 
   const handleLogin = async (values) => {
     try {
-      const response = await axios.request({
+      const response = await axiosInstance.request({
         method: 'POST',
-        url: 'http://localhost:8000/api/auth/login',
+        url: '/auth/login',
         data: values,
         withCredentials: true
       });

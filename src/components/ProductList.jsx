@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Table, Input, Button, Select, Space, Tabs, Tag, Tooltip, notification, Dropdown, Menu } from 'antd';
 import { SearchOutlined, StarOutlined, ExportOutlined, PlusOutlined, MoreOutlined, StarFilled, DeleteTwoTone } from '@ant-design/icons';
-import axios from 'axios';
 import moment from 'moment';
 const { Header, Content } = Layout;
 const { Search } = Input;
@@ -10,6 +9,7 @@ const { TabPane } = Tabs;
 import { Link } from 'react-router-dom';
 import { saveAs } from 'file-saver';
 import Papa from 'papaparse';
+import axiosInstance from '../interceptors/axios.http';
 
 const ProductListPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -27,9 +27,9 @@ const ProductListPage = () => {
   }
 
   const fetchProducts = async () => {
-    const response = await axios.request({
+    const response = await axiosInstance.request({
       method: 'GET',
-      url: 'http://localhost:8000/api/product'
+      url: '/product'
     });
     console.log(response.data.data);
     if (response.data.success) {
@@ -43,9 +43,9 @@ const ProductListPage = () => {
   }
 
   const fetchCategories = async () => {
-    const response = await axios.request({
+    const response = await axiosInstance.request({
       method: 'GET',
-      url: 'http://localhost:8000/api/category'
+      url: '/category'
     });
     if (response.data.success) {
       setCategories(response.data.data);
@@ -62,9 +62,9 @@ const ProductListPage = () => {
   const handleOnStar = async (productId) => {
     console.log(productId);
     const favorite = !products.find(product => product._id === productId).feature;
-    const response = await axios.request({
+    const response = await axiosInstance.request({
       method: "PUT",
-      url: `http://localhost:8000/api/product/${productId}`,
+      url: `/product/${productId}`,
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       },
@@ -82,9 +82,9 @@ const ProductListPage = () => {
 
   const handleOnDelete = async (productId) => {
     console.log(productId);
-    const response = await axios.request({
+    const response = await axiosInstance.request({
       method: "DELETE",
-      url: `http://localhost:8000/api/product/${productId}`,
+      url: `/product/${productId}`,
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }

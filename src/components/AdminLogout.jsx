@@ -1,23 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useEffect } from 'react';  
 import { useAdmin } from '../context/AdminContext.jsx';
+import axiosInstance from '../interceptors/axios.http';
 
 const AdminLogout = () => {
     const navigate = useNavigate();
     const { logoutAdmin } = useAdmin();
 
     useEffect(() => {
-        // axios.post('http://localhost:8000/api/auth/admin-logout')
-        //     .then(response => {
-        //         console.log(response.data);
-        //     })
-        //     .catch(error => {
-        //         console.error('Error:', error);
-        //     });
-        axios.request({
+        axiosInstance.request({
             method: 'POST',
-            url: 'http://localhost:8000/api/auth/admin-logout',
+            url: '/auth/admin-logout',
             withCredentials: true
         })
         .then(response => {

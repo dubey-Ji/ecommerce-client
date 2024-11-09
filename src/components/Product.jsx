@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Card, Rate, Checkbox, Button, Typography, Space, Tag, Drawer } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import axiosInstance from '../interceptors/axios.http';
 
 const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
@@ -14,19 +14,28 @@ const ProductListingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchProducts = async () => {
-    const response = await axios.get("http://localhost:8000/api/product");
+    const response = await axiosInstance.request({
+      method: 'GET',
+      url: '/product'
+    });
     console.log('response in fetchProducts', response.data.data)
     setProducts(response.data.data)
   }
   const fetchCategories = async () => {
-    const response = await axios.get("http://localhost:8000/api/category");
+    const response = await axiosInstance.request({
+      method: 'GET',
+      url: '/category'
+    });
     setCategories(response.data.data)
   }
   const fetchProductByCategory = async (categoryId) => {
     if (categoryId) {
         console.log('Fetching products for category:', categoryId);
       try {
-        const response = await axios.get(`http://localhost:8000/api/product/category/${categoryId}`);
+        const response = await axiosInstance.request({
+          method: 'GET',
+          url: `/product/category/${categoryId}`
+        });
         console.log('response', response.data.data)
         setProducts(response.data.data);  // Assuming the data format is correct
       } catch (error) {
