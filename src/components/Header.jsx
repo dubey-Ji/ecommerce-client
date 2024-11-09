@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { SearchOutlined, UserOutlined, HeartOutlined, ShoppingCartOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import ProfileDropdown from "./ProfileDropdown";
 import {useUser} from '../context/UserContext';
 import { useNavigate } from "react-router-dom";
@@ -11,9 +11,15 @@ import { useCart } from "../context/CartContext";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
     const { userData, logoutUser } = useUser();
     const navigate = useNavigate();
     const { cart } = useCart();
+    useEffect(() => {
+      setCartCount(cart.length);
+      // const localstorageCart = localStorage.getItem('cart');
+      // setCartCount(localstorageCart.length);
+    }, [cart.length]);
     return (
       <header className="sticky top-0 z-50 w-100vw border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex justify-center">
         <div className="container flex h-16 items-center">
@@ -67,7 +73,7 @@ const Header = () => {
                   }
                 }}>
                 <ShoppingCartOutlined />
-                {cart.length > 0 && <span className="absolute top-[-10px] right-[-10px] bg-red-500 text-white rounded-full px-2 py-1 text-xs">{cart.length}</span>}
+                {cartCount > 0 && <span className="absolute top-[-10px] right-[-10px] bg-red-500 text-white rounded-full px-2 py-1 text-xs">{cartCount}</span>}
                 </Button>
             <Button className="border-none shadow-none bg-inherit lg:hidden" onClick={() => setIsMenuOpen(true)}>
               <MenuOutlined />

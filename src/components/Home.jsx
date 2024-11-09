@@ -3,7 +3,6 @@ import FeaturedCategories from "./FeaturedCategories";
 import HeroSection from "./HeroSection";
 import BannerSection from "./BannerSection";
 import { WishlistProvider } from "../context/CartContext";
-import { CartProvider } from "../context/CartContext";
 
 
 const Home = () => {
@@ -12,9 +11,7 @@ const Home = () => {
             <HeroSection />
             <FeaturedCategories />
             <WishlistProvider>
-                <CartProvider>
-                    <FeaturedProducts />
-                </CartProvider>
+                <FeaturedProducts />
             </WishlistProvider>
             <BannerSection />
         </>

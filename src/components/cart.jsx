@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
-import { Layout, Table, Button, Input, InputNumber, Space, Typography, Divider, Select } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Layout, Table, Button, InputNumber, Space, Typography, Divider, Select, Empty } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import axiosInstance from '../interceptors/axios.http';
+import { useCart } from '../context/CartContext';
+
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Fitbit Sense Advanced Smartwatch with Tools for Heart Health, Stress...', category: 'Glossy black', size: 'XL', price: 199, quantity: 2, image: '/placeholder.svg?height=80&width=80' },
-    { id: 2, name: 'iPhone 13 pro max-Pacific Blue-128GB storage', category: 'Glossy black', size: 'XL', price: 150, quantity: 2, image: '/placeholder.svg?height=80&width=80' },
-    { id: 3, name: 'Apple MacBook Pro 13 inch-M1-8/256GB-space', category: 'Glossy Golden', size: '34mm', price: 65, quantity: 2, image: '/placeholder.svg?height=80&width=80' },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
+  const { removeFromCart } = useCart();
 
-  const dynamicColumns = Object.keys(cartItems[0]).filter(key => key !== 'id').map(key => ({
+  const fetchCartItems = async () => {
+    try {
+      const response = await axiosInstance.request({
+        method: 'GET',
+        url: '/cart',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        withCredentials: true
+      });
+      if (response.data.success && response.data.data.length > 0) {
+        setCartItems(response.data.data);
+      } else {
+        setCartItems([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  const dynamicColumns = Object.keys(cartItems[0] || {}).filter(key => key !== '_id').map(key => ({
     title: key.charAt(0).toUpperCase() + key.slice(1),
     dataIndex: key,
     key: key,
@@ -28,13 +52,15 @@ const CartPage = () => {
       } else if (key === 'quantity') {
         return (
           <Space>
-            <Button onClick={() => handleQuantityChange(record.id, text - 1)}>-</Button>
-            <InputNumber min={1} max={10} value={text} onChange={(value) => handleQuantityChange(record.id, value)} />
-            <Button onClick={() => handleQuantityChange(record.id, text + 1)}>+</Button>
+            <Button onClick={() => handleQuantityChange(record._id, text - 1)}>-</Button>
+            <InputNumber min={1} max={10} value={text} onChange={(value) => handleQuantityChange(record._id, value)} />
+            <Button onClick={() => handleQuantityChange(record._id, text + 1)}>+</Button>
           </Space>
         );
       } else if (key === 'total') {
         return `$${(record.price * record.quantity).toFixed(2)}`;
+      } else if (key === 'description') {
+        return <div dangerouslySetInnerHTML={{ __html: text }} />;
       } else {
         return text;
       }
@@ -45,18 +71,23 @@ const CartPage = () => {
     dataIndex: 'action',
     key: 'action',
     render: (_, record) => (
-      <Button icon={<DeleteOutlined />} onClick={() => handleRemoveItem(record.id)} />
+      <Button icon={<DeleteOutlined />} onClick={() => handleRemoveItem(record._id)} />
     ),
   });
 
   const handleQuantityChange = (id, newQuantity) => {
     setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: newQuantity } : item
+      item._id === id ? { ...item, quantity: newQuantity } : item
     ));
   };
 
-  const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+  const handleRemoveItem = async (productId) => {
+    try {
+      removeFromCart(productId);
+      fetchCartItems();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const itemsSubtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -74,13 +105,19 @@ const CartPage = () => {
 
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
-            <Table
-              columns={dynamicColumns}
-              dataSource={cartItems}
-              pagination={false}
-              rowKey="id"
-              scroll={{ x: true }}
-            />
+            {
+              cartItems.length > 0 ? (
+                <Table
+                  columns={dynamicColumns}
+                  dataSource={cartItems}
+                  pagination={false}
+                  rowKey="_id"
+                  scroll={{ x: true }}
+                />
+              ) : (
+                <Empty />
+              )
+            }
             <div className="mt-4 text-right">
               <Text strong>Items subtotal : ${itemsSubtotal.toFixed(2)}</Text>
             </div>
