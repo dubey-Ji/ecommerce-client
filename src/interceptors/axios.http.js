@@ -3,7 +3,7 @@ import axios from "axios";
 import { axiosResponseInterceptor } from "./axios.response";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.BASE_URL,
+  baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
 });
 
 // axiosInstance.interceptors.request.use(axiosRequestInterceptor);
