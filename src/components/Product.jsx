@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Card, Rate, Checkbox, Button, Typography, Space, Tag, Drawer, Skeleton, Empty } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import axiosInstance from '../interceptors/axios.http';
 
 const { Header, Sider, Content } = Layout;
@@ -203,32 +203,34 @@ const ProductListingPage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {
                     products.map(product => (
-                    <Card
-                      key={product.id}
-                cover={<img alt={product.name} src={product.image} className="p-4" />}
-                // actions={[<Button icon={<HeartOutlined />} key="favorite" />]}
-              >
-                <Card.Meta
-                  title={product.name}
-                  description={
-                    <Space direction="vertical" size="small">
-                      {product.rating && <Rate disabled defaultValue={product.rating} />}
-                      {product.reviews && <Text type="secondary">{`(${product.reviews} people rated)`}</Text>}
-                      <Space>
-                        {product.originalPrice && (
-                          <Text delete type="secondary">${product.originalPrice.toFixed(2)}</Text>
-                        )}
-                        <Text strong>${product.price.toFixed(2)}</Text>
-                      </Space>
-                      {/* <Text type="secondary">{`${product.colors} colors`}</Text> */}
-                      {/* {product.verified && <Tag color="success">Verified</Tag>} */}
-                      {/* {product.stockLimited && <Tag color="warning">Stock limited</Tag>} */}
-                      {/* {product.dealEnds && <Tag color="processing">{product.dealEnds}</Tag>} */}
-                      {/* {product.additionalInfo && <Text type="secondary">{product.additionalInfo}</Text>} */}
-                    </Space>
-                      }
-                      />
-                  </Card>
+                      <Link to={`/product/${product._id}`} key={product._id}>
+                        <Card
+                          key={product._id}
+                    cover={<img alt={product.name} src={product.image} className="p-4" />}
+                    // actions={[<Button icon={<HeartOutlined />} key="favorite" />]}
+                  >
+                    <Card.Meta
+                      title={product.name}
+                      description={
+                        <Space direction="vertical" size="small">
+                          {product.rating && <Rate disabled defaultValue={product.rating} />}
+                          {product.reviews && <Text type="secondary">{`(${product.reviews} people rated)`}</Text>}
+                          <Space>
+                            {product.originalPrice && (
+                              <Text delete type="secondary">${product.originalPrice.toFixed(2)}</Text>
+                            )}
+                            <Text strong>${product.price.toFixed(2)}</Text>
+                          </Space>
+                          {/* <Text type="secondary">{`${product.colors} colors`}</Text> */}
+                          {/* {product.verified && <Tag color="success">Verified</Tag>} */}
+                          {/* {product.stockLimited && <Tag color="warning">Stock limited</Tag>} */}
+                          {/* {product.dealEnds && <Tag color="processing">{product.dealEnds}</Tag>} */}
+                          {/* {product.additionalInfo && <Text type="secondary">{product.additionalInfo}</Text>} */}
+                        </Space>
+                          }
+                          />
+                      </Card>
+                  </Link>
                     ))
                 }
               </div>
