@@ -39,7 +39,7 @@ const UserRoute = ({element}) => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <UserProvider><CartProvider><Applayout /></CartProvider></UserProvider>,
+    element: <UserProvider><CartProvider><WishlistProvider><Applayout /></WishlistProvider></CartProvider></UserProvider>,
     children: [
       {
         path: '/',
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/wishlist',
-        element: <WishlistProvider><UserRoute element={<Wishlist />} /></WishlistProvider>
+        element: <UserRoute element={<Wishlist />} />
       },
       {
         path: '/cart',

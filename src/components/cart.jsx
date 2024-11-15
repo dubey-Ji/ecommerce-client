@@ -23,7 +23,17 @@ const CartPage = () => {
         withCredentials: true
       });
       if (response.data.success && response.data.data.length > 0) {
-        setCartItems(response.data.data);
+        let data = [];
+        response.data.data.forEach(item => {
+          data.push({
+            category: item.categoryName,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+          })
+        })
+        setCartItems(data);
       } else {
         setCartItems([]);
       }
@@ -83,7 +93,7 @@ const CartPage = () => {
 
   const handleRemoveItem = async (productId) => {
     try {
-      removeFromCart(productId);
+      await removeFromCart(productId);
       fetchCartItems();
     } catch (error) {
       console.log(error);
