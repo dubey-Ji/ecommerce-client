@@ -1,9 +1,8 @@
-import { Button } from "antd";
+import { Button, Skeleton, message } from "antd";
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useCart, useWishlist } from "../context/CartContext";
-import { message } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import axiosInstance from "../interceptors/axios.http";
 
@@ -31,7 +30,22 @@ const FeaturedProducts = () => {
       <div className="container mx-auto my-0">
         <h2 className="text-3xl font-bold mb-8 text-center">Featured Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
+            {products.length === 0 ? 
+            <>
+              {[1, 2, 3, 4].map((item) => (
+                <div key={item} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <Skeleton.Image active className="!w-full !h-48" />
+                  <div className="p-4">
+                    <Skeleton.Input active className="!w-3/4 !mb-2" size="small" />
+                    <Skeleton.Input active className="!w-1/4 !mb-4" size="small" />
+                    <div className="flex justify-between items-center gap-2">
+                      <Skeleton.Button active className="!w-full" />
+                      <Skeleton.Button active className="!w-full" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </> : products.map((product) => (
             <div key={product.name} className="bg-white rounded-lg shadow-md overflow-hidden">
               <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
               <div className="p-4">
