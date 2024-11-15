@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Carousel, Rate, InputNumber, Button, Tabs, Card, Row, Col, Input, Rate as AntRate } from 'antd';
-import { ShoppingCartOutlined, HeartOutlined } from '@ant-design/icons';
+import { Carousel, Rate, InputNumber, Button, Tabs, Card, Row, Col, Input, Rate as AntRate, message } from 'antd';
+import { ShoppingCartOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
-// import { useCart, useWishlist } from '../context/CartContext';
-import useAddToCart from '../Customhooks/useAddToCart';
+import { useCart, useWishlist } from '../context/CartContext';
+// import useAddToCart from '../Customhooks/useAddToCart';
 import axiosInstance from '../interceptors/axios.http';
 
 const { TabPane } = Tabs;
@@ -19,10 +19,10 @@ const ProductDetails = () => {
 //   const [similarProducts, setSimilarProducts] = useState([]);
   const { id } = useParams();
   const { userData } = useUser();
-  console.log('userData', userData)
-//   const { addToCart, cart, removeFromCart } = useCart();
-//   const { addToWishlist, wishlist, removeFromWishlist } = useWishlist();
-  const addToCart = useAddToCart();
+  // console.log('userData', userData)
+  const { addToCart } = useCart();
+  const { addToWishlist, wishlist, removeFromWishlist } = useWishlist();
+  // const addToCart = useAddToCart();
   const fetchProduct = async (productId) => {
     try {
         const response = await axiosInstance.request({
@@ -150,7 +150,7 @@ const ProductDetails = () => {
         <Col xs={24} md={12}>
           <h1 className="text-2xl md:text-3xl font-bold mb-4">{product?.name}</h1>
           <div className="flex items-center mb-4">
-            <Rate allowHalf defaultValue={product?.rating} disabled />
+            <Rate allowHalf defaultValue={product?.rating || 3.5} disabled />
             <span className="ml-2 text-gray-600">{product?.rating} stars</span>
           </div>
           <p className="text-xl md:text-2xl font-semibold mb-4">${product?.price.toFixed(2)}</p>
@@ -169,9 +169,11 @@ const ProductDetails = () => {
             }}>
               Add to Cart
             </Button>
-            <Button icon={<HeartOutlined />} size="large" block onClick={() => {
-                if (userData?.token) {
+            <Button icon={wishlist.includes(product?._id) ? <HeartFilled /> : <HeartOutlined />} size="large" block onClick={() => {
+                if (userData?.token && !wishlist.includes(product?._id)) {
                     addToWishlist(product?._id)
+                } else if (userData?.token && wishlist.includes(product?._id)) {
+                    removeFromWishlist(product?._id)
                 } else {
                     message.error('Please login to add to wishlist')
                 }
@@ -207,7 +209,7 @@ const ProductDetails = () => {
                 <div>
                     {existingReviews.map((review) => (
     
-                            <div>
+                            <div key={review._id}>
                                 <p>{review.comment}</p>
                                 <div className="flex items-center mb-4">
                                 <Rate allowHalf defaultValue={review.rating} disabled />
@@ -224,7 +226,7 @@ const ProductDetails = () => {
         <h2 className="text-2xl font-bold mb-4">Similar Products</h2>
         <Row gutter={[16, 16]}>
           {similarProducts.map((product) => (
-            <Col xs={24} sm={12} md={8} lg={6} key={product.id}>
+            <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
               <Card
                 cover={<img alt={product.name} src={product.image} className="h-48 object-cover" />}
                 hoverable
