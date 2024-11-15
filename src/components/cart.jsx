@@ -137,9 +137,9 @@ const CartPage = () => {
             <div className="bg-white p-6 rounded-lg shadow">
               <div className="flex justify-between items-center mb-4">
                 <Title level={4}>Summary</Title>
-                <Button type="link" icon={<EditOutlined />}>
+                {/* <Button type="link" icon={<EditOutlined />}>
                   Edit cart
-                </Button>
+                </Button> */}
               </div>
               <Select defaultValue="cash" style={{ width: '100%' }} className="mb-4">
                 <Select.Option value="cash">Cash on Delivery</Select.Option>
