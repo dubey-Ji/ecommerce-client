@@ -37,7 +37,7 @@ const FeaturedProducts = () => {
                   <Skeleton.Image active className="!w-full !h-48" />
                   <div className="p-4">
                     <Skeleton.Input active className="!w-3/4 !mb-2" size="small" />
-                    <Skeleton.Input active className="!w-1/4 !mb-4" size="small" />
+                    {/* <Skeleton.Input active className="!w-1/4 !mb-4" size="small" /> */}
                     <div className="flex justify-between items-center gap-2">
                       <Skeleton.Button active className="!w-full" />
                       <Skeleton.Button active className="!w-full" />
@@ -46,33 +46,35 @@ const FeaturedProducts = () => {
                 </div>
               ))}
             </> : products.map((product) => (
-            <div key={product.name} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
-              <div className="p-4">
-                <Link to={`/product/${product._id}`}><h3 className="font-semibold">{product.name}</h3></Link>
-                <p className="text-gray-600">$ {product.price}</p>
-                <div className="flex justify-between items-center">
-                  <Button icon={wishlist.includes(product._id) ? <HeartFilled /> : <HeartOutlined />} className="w-full mt-4 bg-gray-100 text-gray-700 rounded-md px-4 py-2 hover:bg-gray-200 mr-2" onClick={() => {
-                    if (userData?.token && !wishlist.includes(product._id)) {
-                      addToWishlist(product._id)
-                    } else if (userData?.token && wishlist.includes(product._id)) {
-                      removeFromWishlist(product._id)
-                    } else {
-                      message.error('Please login to add to wishlist')
-                    }
-                  }}></Button>
-                  <Button className="w-full mt-4" onClick={() => {
-                    if (userData?.token) {
-                      addToCart(product._id)
-                    } else if (userData?.token && cart.includes(product._id)) {
-                      removeFromCart(product._id)
-                    } else {
-                      message.error('Please login to add to cart')
-                    }
-                  }}>Add to Cart</Button>
+                <div key={product.name} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <Link to={`/product/${product._id}`}>
+                    <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+                    <div className="p-4">
+                      <h3 className="font-semibold">{product.name}</h3>
+                      <p className="text-gray-600">$ {product.price}</p>
+                    </div>
+                  </Link>
+                  <div className="flex justify-between items-center p-4">
+                    <Button icon={wishlist.includes(product._id) ? <HeartFilled /> : <HeartOutlined />} className="w-full mt-4 bg-gray-100 text-gray-700 rounded-md px-4 py-2 hover:bg-gray-200 mr-2" onClick={() => {
+                      if (userData?.token && !wishlist.includes(product._id)) {
+                        addToWishlist(product._id)
+                      } else if (userData?.token && wishlist.includes(product._id)) {
+                        removeFromWishlist(product._id)
+                      } else {
+                        message.error('Please login to add to wishlist')
+                      }
+                    }}></Button>
+                    <Button className="w-full mt-4" onClick={() => {
+                      if (userData?.token) {
+                        addToCart(product._id)
+                      } else if (userData?.token && cart.includes(product._id)) {
+                        removeFromCart(product._id)
+                      } else {
+                        message.error('Please login to add to cart')
+                      }
+                    }}>Add to Cart</Button>
+                  </div>
                 </div>
-              </div>
-            </div>
           ))}
         </div>
       </div>
