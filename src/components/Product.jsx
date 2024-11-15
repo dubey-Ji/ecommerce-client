@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Card, Rate, Checkbox, Button, Typography, Space, Tag, Drawer } from 'antd';
+import { Layout, Card, Rate, Checkbox, Button, Typography, Space, Tag, Drawer, Skeleton, Empty } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
 import axiosInstance from '../interceptors/axios.http';
@@ -12,6 +12,7 @@ const ProductListingPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProductsLoading, setIsProductsLoading] = useState(true);
 
   const fetchProducts = async () => {
     const response = await axiosInstance.request({
@@ -19,7 +20,18 @@ const ProductListingPage = () => {
       url: '/product'
     });
     console.log('response in fetchProducts', response.data.data)
-    setProducts(response.data.data)
+    if (response.data.success) {
+      if (response.data.data.length > 0) {
+        setIsProductsLoading(false)
+        setProducts(response.data.data)
+      } else {
+        setIsProductsLoading(false)
+        setProducts([])
+      }
+    } else {
+      setProducts([])
+      setIsProductsLoading(false)
+    }
   }
   const fetchCategories = async () => {
     const response = await axiosInstance.request({
@@ -151,15 +163,31 @@ const ProductListingPage = () => {
           </Sider>
         )}
         <Content className="p-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {
-              products.length === 0 ? (
-                <div>No products found</div>
-              ) : (
-                console.log('products', products),
-                products.map(product => (
-              <Card
-                key={product.id}
+          {
+            products.length === 0 && isProductsLoading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+                  <div key={item} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <Skeleton.Image active className="!w-full !h-48" />
+                  <div className="p-4">
+                    <Skeleton.Input active className="!w-3/4 !mb-2" size="small" />
+                    <div className="flex justify-between items-center">
+                      <Skeleton.Button active className="!w-full" />
+                    </div>
+                    </div>
+                  </div>
+                  ))}
+                </div>
+            ) : products.length === 0 && !isProductsLoading ? (
+                <div className="min-h-[calc(100vh-64px)] -mt-8 flex items-center justify-center">
+                  <Empty description="No Products Found" />
+                </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {
+                    products.map(product => (
+                    <Card
+                      key={product.id}
                 cover={<img alt={product.name} src={product.image} className="p-4" />}
                 // actions={[<Button icon={<HeartOutlined />} key="favorite" />]}
               >
@@ -181,13 +209,14 @@ const ProductListingPage = () => {
                       {/* {product.dealEnds && <Tag color="processing">{product.dealEnds}</Tag>} */}
                       {/* {product.additionalInfo && <Text type="secondary">{product.additionalInfo}</Text>} */}
                     </Space>
-                  }
-                />
+                      }
+                      />
                   </Card>
-                ))
-              )
-            }
-          </div>
+                    ))
+                }
+              </div>
+            )
+          }
         </Content>
       </Layout>
       <Drawer
