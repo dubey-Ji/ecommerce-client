@@ -141,9 +141,15 @@ const ProductListingPage = () => {
           setSelectedFilters(prev => ({ id: values.length > 0 ? values[0] : '' }));
         }}>
           <Space direction="vertical">
-            {categories.map(category => (
-              <Checkbox key={category._id} value={category._id}>{category.name}</Checkbox>
-            ))}
+            {categories.length === 0 ? (
+              [1,2,3,4,5].map((item) => (
+                <Skeleton.Button active className="!w-full" key={item} size="small" />
+              ))
+            ) : (
+              categories.map(category => (
+                <Checkbox key={category._id} value={category._id}>{category.name}</Checkbox>
+              ))
+            )}
           </Space>
         </Checkbox.Group>
       </div>
