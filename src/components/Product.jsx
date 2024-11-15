@@ -49,7 +49,18 @@ const ProductListingPage = () => {
           url: `/product/category/${categoryId}`
         });
         console.log('response', response.data.data)
-        setProducts(response.data.data);  // Assuming the data format is correct
+        if (response.data.success) {
+          if (response.data.data.length > 0) {  
+            setIsProductsLoading(false)
+            setProducts(response.data.data);  // Assuming the data format is correct
+          } else {
+            setIsProductsLoading(false)
+            setProducts([])
+          }
+        } else {
+          setProducts([])
+          setIsProductsLoading(false)
+        }
       } catch (error) {
         console.error('Error fetching products by category:', error);
       }
