@@ -66,7 +66,7 @@ const FeaturedProducts = () => {
                     }}></Button>
                     <Button className="w-full mt-4" onClick={() => {
                       if (userData?.token) {
-                        addToCart(product._id)
+                        addToCart(product._id, 1)
                       } else if (userData?.token && cart.includes(product._id)) {
                         removeFromCart(product._id)
                       } else {
