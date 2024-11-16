@@ -23,7 +23,19 @@ const CartPage = () => {
         withCredentials: true
       });
       if (response.data.success && response.data.data.length > 0) {
-        setCartItems(response.data.data);
+        let data = [];
+        response.data.data.forEach(item => {
+          data.push({
+            category: item.categoryName,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+            quantity: item.quantity,
+            _id: item._id
+          })
+        })
+        setCartItems(data);
       } else {
         setCartItems([]);
       }
@@ -83,14 +95,14 @@ const CartPage = () => {
 
   const handleRemoveItem = async (productId) => {
     try {
-      removeFromCart(productId);
+      await removeFromCart(productId);
       fetchCartItems();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const itemsSubtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const itemsSubtotal = cartItems.reduce((acc, item) => item.price * item.quantity, 0);
   const discount = 59;
   const tax = itemsSubtotal * 0.2; // Assuming 20% tax
   const shipping = 30;
@@ -127,12 +139,12 @@ const CartPage = () => {
             <div className="bg-white p-6 rounded-lg shadow">
               <div className="flex justify-between items-center mb-4">
                 <Title level={4}>Summary</Title>
-                <Button type="link" icon={<EditOutlined />}>
+                {/* <Button type="link" icon={<EditOutlined />}>
                   Edit cart
-                </Button>
+                </Button> */}
               </div>
-              <Select defaultValue="cash" style={{ width: '100%' }} className="mb-4">
-                <Select.Option value="cash">Cash on Delivery</Select.Option>
+              <Select defaultValue="card" style={{ width: '100%' }} className="mb-4">
+                {/* <Select.Option value="cash">Cash on Delivery</Select.Option> */}
                 <Select.Option value="card">Credit Card</Select.Option>
               </Select>
               <Space direction="vertical" className="w-full">
@@ -140,26 +152,32 @@ const CartPage = () => {
                   <Text>Items subtotal :</Text>
                   <Text>${itemsSubtotal.toFixed(2)}</Text>
                 </div>
-                <div className="flex justify-between">
-                  <Text>Discount :</Text>
-                  <Text className="text-red-500">-${discount.toFixed(2)}</Text>
-                </div>
+                {
+                  cartItems.length > 0 ? (
+                    <>
+                      <div className="flex justify-between">
+                        <Text>Discount :</Text>
+                        <Text className="text-red-500">{`-${discount.toFixed(2)}`}</Text>
+                      </div>
+                    </>
+                  ) : null
+                }
                 <div className="flex justify-between">
                   <Text>Tax :</Text>
                   <Text>${tax.toFixed(2)}</Text>
                 </div>
                 <div className="flex justify-between">
                   <Text>Subtotal :</Text>
-                  <Text>${(itemsSubtotal - discount + tax).toFixed(2)}</Text>
+                  <Text>{cartItems.length > 0 ? `$${(itemsSubtotal - discount + tax).toFixed(2)}` : '$0.00'}</Text>
                 </div>
                 <div className="flex justify-between">
                   <Text>Shipping Cost :</Text>
-                  <Text>${shipping.toFixed(2)}</Text>
+                  <Text>{cartItems.length > 0 ? `$${shipping.toFixed(2)}` : '$0.00'}</Text>
                 </div>
                 <Divider />
                 <div className="flex justify-between">
                   <Text strong>Total :</Text>
-                  <Text strong>${total.toFixed(2)}</Text>
+                  <Text strong>{cartItems.length > 0 ? `$${total.toFixed(2)}` : '$0.00'}</Text>
                 </div>
               </Space>
               <Button type="primary" block className="mt-4">

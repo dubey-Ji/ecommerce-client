@@ -41,7 +41,7 @@ export const CartProvider = ({ children }) => {
   }, [userData?.token]);
 
 
-  const addToCart = async (productId) => {
+  const addToCart = async (productId, quantity) => {
     let newCart;
     if (!cart.includes(productId)) {
       newCart = [...cart, productId];
@@ -56,7 +56,7 @@ export const CartProvider = ({ children }) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       },
       withCredentials: true,
-      data: { productId, quantity: 1 }
+      data: { productId, quantity }
     });
     if (response.data.success) {
       setCart(newCart);
