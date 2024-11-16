@@ -31,7 +31,6 @@ const CartPage = () => {
             price: item.price,
             quantity: item.quantity,
             image: item.image,
-            quantity: item.quantity,
             _id: item._id
           })
         })
