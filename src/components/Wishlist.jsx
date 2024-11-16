@@ -3,9 +3,13 @@ import { Table, Button, Image, Space, Dropdown, Menu } from 'antd';
 import { MoreOutlined, ShoppingCartOutlined, DeleteOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import axiosInstance from '../interceptors/axios.http';
+import { useUser } from '../context/UserContext';
+import { useCart } from '../context/CartContext';
 
 const WishlistTable = () => {
   const [wishlist, setWishlist] = useState([]);
+  const { userData } = useUser();
+  const { addToCart } = useCart();
 
   const fetchWishlist = async () => {
     try {
@@ -104,7 +108,13 @@ const WishlistTable = () => {
               </Menu.Item>
               <Menu.Item
                 icon={<ShoppingCartOutlined />}
-                onClick={() => console.log('Add to cart clicked')}
+                onClick={() => {
+                  if (userData?.token) {
+                    addToCart(record._id, 1)
+                  } else {
+                    message.error('Please login to add to cart')
+                  }
+                }}
               >
                 Add to Cart
               </Menu.Item>
