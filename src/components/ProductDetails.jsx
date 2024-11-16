@@ -3,9 +3,8 @@ import { Carousel, Rate, InputNumber, Button, Tabs, Card, Row, Col, Input, Rate 
 import { ShoppingCartOutlined, HeartOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
-// import { useCart, useWishlist } from '../context/CartContext';
-import useAddToCart from '../Customhooks/useAddToCart';
 import axiosInstance from '../interceptors/axios.http';
+import { useCart, useWishlist } from '../context/CartContext';
 
 const { TabPane } = Tabs;
 
@@ -20,9 +19,8 @@ const ProductDetails = () => {
   const { id } = useParams();
   const { userData } = useUser();
   console.log('userData', userData)
-//   const { addToCart, cart, removeFromCart } = useCart();
-//   const { addToWishlist, wishlist, removeFromWishlist } = useWishlist();
-  const addToCart = useAddToCart();
+  const { addToCart } = useCart();
+  const { addToWishlist } = useWishlist();
   const fetchProduct = async (productId) => {
     try {
         const response = await axiosInstance.request({
