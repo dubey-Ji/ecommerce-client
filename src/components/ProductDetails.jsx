@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Carousel, Rate, InputNumber, Button, Tabs, Card, Row, Col, Input, Rate as AntRate } from 'antd';
+import { Carousel, Rate, InputNumber, Button, Tabs, Card, Row, Col, Input, Rate as AntRate, message } from 'antd';
 import { ShoppingCartOutlined, HeartOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
