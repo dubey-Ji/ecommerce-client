@@ -87,6 +87,9 @@ const CartPage = () => {
   });
 
   const handleQuantityChange = (id, newQuantity) => {
+    if (newQuantity < 1) {
+      return;
+    }
     setCartItems(cartItems.map(item => 
       item._id === id ? { ...item, quantity: newQuantity } : item
     ));
