@@ -25,7 +25,6 @@ import { WishlistProvider } from './context/CartContext.jsx'
 import ProductDetails from './components/ProductDetails.jsx'
 import OrderFullfilment from './components/OrderFullfilment.jsx'
 import OrderLayout from './components/OrderLayout.jsx'
-import OrderConfirmationPage from './components/OrderConfirmationV1.jsx'
 const AdminRoute = ({element}) => {
   const isAdmin = localStorage.getItem('isAdmin');
   console.log('isAdmin', isAdmin)
@@ -66,10 +65,6 @@ const router = createBrowserRouter([
       {
         path: '/logout',
         element: <UserRoute element={<Logout />} />
-      },
-      {
-        path: '/order-confirmation',
-        element: <OrderConfirmationPage />
       },
       {
         path: '/order-fulfilment',
