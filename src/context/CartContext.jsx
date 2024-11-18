@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     const cart = localStorage.getItem('cart');
-    if (cart) {
+    if (cart && JSON.parse(cart).length > 0) {
       setCart(JSON.parse(cart));
     } else if (userData?.token) {
       fetchCart();

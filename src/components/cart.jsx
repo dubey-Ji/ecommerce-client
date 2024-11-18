@@ -3,6 +3,7 @@ import { Layout, Table, Button, InputNumber, Space, Typography, Divider, Select,
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import axiosInstance from '../interceptors/axios.http';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const { Content } = Layout;
@@ -10,8 +11,9 @@ const { Title, Text } = Typography;
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [total, setTotal] = useState(0);
   const { removeFromCart } = useCart();
-
+  const navigate = useNavigate();
   const fetchCartItems = async () => {
     try {
       const response = await axiosInstance.request({
@@ -35,6 +37,11 @@ const CartPage = () => {
           })
         })
         setCartItems(data);
+        let total = 0;
+        data.forEach(item => {
+          total += item.price * item.quantity;
+        });
+        setTotal(total);
       } else {
         setCartItems([]);
       }
@@ -103,13 +110,13 @@ const CartPage = () => {
       console.log(error);
     }
   };
-
-  const itemsSubtotal = cartItems.reduce((acc, item) => item.price * item.quantity, 0);
+  let itemsSubtotal = cartItems.reduce((acc, item) => {
+    return acc + item.price * item.quantity;
+  }, 0);
   const discount = 59;
   const tax = itemsSubtotal * 0.2; // Assuming 20% tax
   const shipping = 30;
-  const total = itemsSubtotal - discount + tax + shipping;
-
+  let finalTotal = total - discount + tax + shipping;
   return (
     <Layout className="min-h-screen bg-gray-100">
 
@@ -179,10 +186,10 @@ const CartPage = () => {
                 <Divider />
                 <div className="flex justify-between">
                   <Text strong>Total :</Text>
-                  <Text strong>{cartItems.length > 0 ? `$${total.toFixed(2)}` : '$0.00'}</Text>
+                  <Text strong>{cartItems.length > 0 ? `$${finalTotal.toFixed(2)}` : '$0.00'}</Text>
                 </div>
               </Space>
-              <Button type="primary" block className="mt-4">
+              <Button type="primary" block className="mt-4" onClick={() => navigate('/order-fulfilment/0', { state: { cartItems, total: total } })}>
                 Proceed to check out
               </Button>
             </div>
