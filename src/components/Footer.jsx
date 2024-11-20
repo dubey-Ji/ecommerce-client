@@ -22,9 +22,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
             <div className="flex space-x-4">
-              <a to="#" className="text-gray-400 hover:text-white">Facebook</a>
-              <a to="#" className="text-gray-400 hover:text-white">Twitter</a>
-              <a to="#" className="text-gray-400 hover:text-white">Instagram</a>
+              <Link to="https://github.com/dubey-Ji" className="text-gray-400 hover:text-white" target="_blank">Github</Link>
+              <Link to="https://www.linkedin.com/in/ashutosh-dubey-bk/" className="text-gray-400 hover:text-white" target="_blank">LinkedIn</Link>
+              <Link to="https://x.com/_ashutoshdubey" className="text-gray-400 hover:text-white" target="_blank">Twitter</Link>
             </div>
           </div>
           <div>
@@ -36,7 +36,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-          <p>&copy; 2024 Your Company. All rights reserved.</p>
+          <p>&copy; 2024 Ecommerce | Ashutosh Dubey. All rights reserved.</p>
         </div>
       </div>
     </footer>
